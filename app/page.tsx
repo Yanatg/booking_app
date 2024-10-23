@@ -1,8 +1,5 @@
 "use client";
 import { GoogleSignInButton } from "@/app/components/authButtons";
-
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/app/lib/auth";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -10,7 +7,7 @@ import { useSession } from "next-auth/react";
 export default function Home() {
   const { data: session } = useSession();
   if (session) {
-    redirect("/accommodation");
+    console.log("page", session);
   }
 
   return (
