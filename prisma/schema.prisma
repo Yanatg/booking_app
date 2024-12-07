@@ -13,6 +13,7 @@ model accommodations {
   location        String     @db.VarChar(255)
   price_per_night Decimal    @db.Decimal
   available       Boolean?   @default(true)
+  image           String?    @db.VarChar(255)
   bookings        bookings[]
 }
 
