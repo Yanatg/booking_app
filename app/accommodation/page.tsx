@@ -5,19 +5,21 @@ import { redirect } from "next/navigation";
 import Card from "@/app/components/card";
 import { get } from "http";
 import { useEffect, useState } from "react";
+import local from "next/font/local";
 
 interface Accommodation {
-  id: number;
+  id: string;
   name: string;
   location: string;
   price_per_night: number;
+  image: string;
+  userId: string;
 }
 
 export default function Home() {
   const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
   const { data: session } = useSession();
-  console.log(session);
-
+  
   async function logout() {
     await signOut({ callbackUrl: "/" });
   }
@@ -37,7 +39,7 @@ export default function Home() {
   return (
     <div className="p-24 grid grid-cols-3 justify-items-center gap-4">
       {accommodations.map((accommodation) => (
-        <Card key={accommodation.id} name={accommodation.name} location={accommodation.location} price={accommodation.price_per_night} />
+        <Card accommodation_id={accommodation.id} key={accommodation.id} name={accommodation.name} location={accommodation.location} price={accommodation.price_per_night} image={accommodation.image}/>
       ))}
     </div>
   );
