@@ -1,11 +1,9 @@
 "use client";
-import { sign } from "crypto";
 import { signOut, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Card from "@/app/components/card";
 import { get } from "http";
 import { useEffect, useState } from "react";
-import local from "next/font/local";
 
 interface Accommodation {
   id: string;
