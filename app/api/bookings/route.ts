@@ -16,9 +16,12 @@ export async function GET(req: NextRequest) {
 
     console.log("userId:", userId);
 
-    // Fetch bookings for the given user_id
+    // Fetch bookings for the given user_id, including accommodation data
     const bookings = await prisma.bookings.findMany({
       where: { user_id: userId },
+      include: {
+        accommodations: true, // Include related accommodation data
+      },
     });
 
     return NextResponse.json({ data: bookings, status: 200 });
