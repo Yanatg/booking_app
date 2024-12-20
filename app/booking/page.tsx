@@ -36,6 +36,7 @@ const calculateTotalPayment = (startDate: string, endDate: string, pricePerNight
 export default function BookingList() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Fetch bookings for the logged-in user
   const fetchBookings = async () => {
@@ -51,12 +52,49 @@ export default function BookingList() {
 
       if (response.ok) {
         setBookings(data.data);
-        console.log(data.data);
       } else {
         console.error("Failed to fetch bookings:", data.error);
       }
     } catch (error) {
       console.error("Error fetching bookings:", error);
+    }
+  };
+
+  // Handle payment submission
+  const handlePayment = async (booking: Booking) => {
+    try {
+      setIsProcessing(true);
+      const totalAmount = calculateTotalPayment(
+        booking.start_date,
+        booking.end_date,
+        booking.accommodations.price_per_night
+      );
+
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          booking_id: booking.id,
+          amount: totalAmount,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Payment successful!');
+        await fetchBookings(); // Refresh the bookings list
+        setSelectedBooking(null);
+      } else {
+        throw new Error(data.error || 'Payment failed');
+      }
+    } catch (error: any) {
+      console.error('Payment failed:', error);
+      alert(error.message || 'Payment failed. Please try again.');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -120,17 +158,16 @@ export default function BookingList() {
               <button
                 className="px-4 py-2 bg-gray-300 rounded mr-2 hover:bg-gray-400"
                 onClick={() => setSelectedBooking(null)}
+                disabled={isProcessing}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                onClick={() => {
-                  // Handle payment logic here
-                  setSelectedBooking(null);
-                }}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-green-300"
+                onClick={() => handlePayment(selectedBooking)}
+                disabled={isProcessing}
               >
-                Confirm
+                {isProcessing ? 'Processing...' : 'Confirm'}
               </button>
             </div>
           </div>
