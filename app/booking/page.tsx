@@ -90,9 +90,12 @@ export default function BookingList() {
       } else {
         throw new Error(data.error || 'Payment failed');
       }
-    } catch (error: any) {
-      console.error('Payment failed:', error);
-      alert(error.message || 'Payment failed. Please try again.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Payment Failed: ', error.message);
+          } else {
+            console.error('Payment Failed: ', error);
+          }
     } finally {
       setIsProcessing(false);
     }

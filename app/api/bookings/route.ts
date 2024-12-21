@@ -30,8 +30,12 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json({ data: bookings, status: 200 });
-  } catch (error: any) {
-    console.error('Error fetching bookings:', error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+        console.error('Error fetching bookings:', error.message);
+      } else {
+        console.error('Error fetching bookings:', error);
+      }
     return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 });
   }
 }
@@ -104,8 +108,12 @@ export async function POST(req: NextRequest) {
       status: 200
     });
 
-  } catch (error: any) {
-    console.error('Error processing payment:', error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+        console.error('Error creating payment:', error.message);
+      } else {
+        console.error('Error creating payment:', error);
+      }
     return NextResponse.json(
       { error: 'Failed to process payment' },
       { status: 500 }

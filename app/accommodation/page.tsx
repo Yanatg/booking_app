@@ -1,8 +1,5 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import Card from "@/app/components/card";
-import { get } from "http";
 import { useEffect, useState } from "react";
 
 interface Accommodation {
@@ -16,11 +13,6 @@ interface Accommodation {
 
 export default function Home() {
   const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
-  const { data: session } = useSession();
-  
-  async function logout() {
-    await signOut({ callbackUrl: "/" });
-  }
 
   const getAccommodations = async () => {
     const response = await fetch("/api/accommodation");

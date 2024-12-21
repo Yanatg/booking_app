@@ -1,6 +1,5 @@
 "use client";
 import { GoogleSignInButton } from "@/app/components/authButtons";
-import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 

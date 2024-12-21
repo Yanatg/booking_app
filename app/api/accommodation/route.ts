@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 }
 
 // GET endpoint to retrieve all accommodations
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const accommodations = await prisma.accommodations.findMany();
     console.log("accommodations", accommodations);
